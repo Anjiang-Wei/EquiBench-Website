@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WLB3DPRW48"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-WLB3DPRW48');
+  </script>
+  <script
+    type="module"
+    src="https://gradio.s3-us-west-2.amazonaws.com/5.9.1/gradio.js"
+  ></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta content="EquiBench: Benchmarking Code Reasoning Capabilities of Large Language Models via Equivalence Checking" property="og:title">
+  <meta content="EquiBench: Benchmarking Code Reasoning Capabilities of Large Language Models via Equivalence Checking" property="twitter:title">
+  <meta property="og:type" content="website">
+ 
+  <title>EquiBench: Benchmarking Code Reasoning Capabilities of Large Language Models via Equivalence Checking</title>
+  <link rel="icon" type="image/x-icon" href="assets/favicon_io/favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon_io/favicon.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon_io/favicon.png">
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <link rel="stylesheet" href="./static/css/custom.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+
+  <style>
+    .image-set {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 3px;
+      margin-bottom: 3px;
+    }
+    .hypotheses {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .square-image {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      overflow: hidden;
+    }
+    #leaderboard-table td, #leaderboard-table th {
+      text-align: center;
+    }
+    table {
+      border-collapse: collapse;
+      border: 1px solid #ddd;
+      width: 100%;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #f2f2f2;
+      text-align: left;
+    }
+    img {
+      display: block;
+      margin: 0 auto;
+      width: 60%;
+    }
+  </style>
+
+  <meta charset="utf-8">
+  <link rel="dns-prefetch" href="https://github.githubassets.com">
+  <link rel="dns-prefetch" href="https://avatars.githubusercontent.com">
+  <link rel="dns-prefetch" href="https://github-cloud.s3.amazonaws.com">
+  <link rel="dns-prefetch" href="https://user-images.githubusercontent.com/">
+  <link rel="preconnect" href="https://github.githubassets.com" crossorigin>
+  <link rel="preconnect" href="https://avatars.githubusercontent.com">
+
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/light-74231a1f3bbb.css"/>
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/dark-8a995f0bacd4.css"/>
+  <link data-color-theme="dark_dimmed" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_dimmed-f37fb7684b1f.css"/>
+  <link data-color-theme="dark_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_high_contrast-9ac301c3ebe5.css"/>
+  <link data-color-theme="dark_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_colorblind-cd826e8636dc.css"/>
+  <link data-color-theme="light_colorblind" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_colorblind-f91b0f603451.css"/>
+  <link data-color-theme="light_high_contrast" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_high_contrast-83beb16e0ecf.css"/>
+  <link data-color-theme="light_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/light_tritanopia-6e122dab64fc.css"/>
+  <link data-color-theme="dark_tritanopia" crossorigin="anonymous" media="all" rel="stylesheet" data-href="https://github.githubassets.com/assets/dark_tritanopia-18119e682df0.css"/>
+
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-primitives-225433424a87.css"/>
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-cba26849680f.css"/>
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/global-03f97e65e478.css"/>
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/github-ea73c9cb5377.css"/>
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/repository-4fce88777fa8.css"/>
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/code-0210be90f4d3.css"/>
+
+  <script type="application/json" id="client-env">{"locale":"en","featureFlags":["allow_subscription_halted_error","copilot_immersive_issue_preview","copilot_new_references_ui","copilot_chat_attach_images","copilot_chat_attachments","copilot_chat_repo_custom_instructions_preview","copilot_chat_opening_thread_switch","copilot_chat_wholearea_dd","copilot_dotcom_chat_file_upload","copilot_no_floating_button","copilot_topics_as_references","copilot_read_shared_conversation","copilot_duplicate_thread","copilot_share_active_subthread","copilot_buffered_streaming","dotcom_chat_client_side_skills","experimentation_azure_variant_endpoint","failbot_handle_non_errors","geojson_azure_maps","ghost_pilot_confidence_truncation_25","ghost_pilot_confidence_truncation_40","github_models_gateway","github_models_gateway_parse_params","github_models_o3_mini_streaming","insert_before_patch","issues_advanced_search","issues_react_remove_placeholders","issues_react_blur_item_picker_on_close","issues_advanced_search_nested_ownership_filters","issues_dashboard_no_redirects","marketing_pages_search_explore_provider","memex_roadmap_drag_style","primer_react_css_modules_ga","react_data_router_pull_requests","react_override_default_key","remove_child_patch","repository_suggester_elastic_search","sample_network_conn_type","swp_enterprise_contact_form","site_proxima_australia_update","viewscreen_sandbox","issues_react_create_milestone","issues_react_cache_fix_workaround","lifecycle_label_name_updates","item_picker_new_select_panel","copilot_task_oriented_assistive_prompts","issue_types_prevent_private_type_creation","issues_react_grouped_diff_on_edit_history","issues_react_bypass_template_selection","refresh_image_video_src","react_router_dispose_on_disconnect","codespaces_prebuild_region_target_update","turbo_app_id_restore","use_paginated_org_picker_cost_center_form","copilot_code_review_sign_up_closed","use_paginated_repo_picker_cost_center_form"],"login":"frogcjn"}</script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/wp-runtime-f8247267f0ba.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_oddbird_popover-polyfill_dist_popover_js-9da652f58479.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_arianotify-polyfill_ariaNotify-polyfill_js-node_modules_github_mi-3abb8f-46b9f4874d95.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/ui_packages_failbot_failbot_ts-952d624642a1.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/environment-f04cb2a9fc8c.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_primer_behaviors_dist_esm_index_mjs-0dbb79f97f8f.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_selector-observer_dist_index_esm_js-f690fd9ae3d5.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_relative-time-element_dist_index_js-62d275b7ddd9.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_text-expander-element_dist_index_js-78748950cb0c.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_auto-complete-element_dist_index_js-node_modules_github_catalyst_-8e9f78-a90ac05d2469.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_filter-input-element_dist_index_js-node_modules_github_remote-inp-b5f1d7-a1760ffda83d.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_markdown-toolbar-element_dist_index_js-ceef33f593fa.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_file-attachment-element_dist_index_js-node_modules_primer_view-co-c44a69-efa32db3a345.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/github-elements-394f8eb34f19.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/element-registry-0fd720babc23.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_braintree_browser-detection_dist_browser-detection_js-node_modules_githu-2906d7-2a07a295af40.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_lit-html_lit-html_js-be8cb88f481b.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_mini-throttle_dist_index_js-node_modules_morphdom_dist_morphdom-e-7c534c-a4a1922eb55f.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_turbo_dist_turbo_es2017-esm_js-a03ee12d659a.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_remote-form_dist_index_js-node_modules_delegated-events_dist_inde-893f9f-b6294cf703b7.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_color-convert_index_js-e3180fe3bcb3.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_quote-selection_dist_index_js-node_modules_github_session-resume_-947061-e7a6c4a19f98.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/ui_packages_updatable-content_updatable-content_ts-62f3e9c52ece.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/app_assets_modules_github_behaviors_task-list_ts-app_assets_modules_github_sso_ts-ui_packages-900dde-768abe60b1f8.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/app_assets_modules_github_sticky-scroll-into-view_ts-3e000c5d31a9.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/app_assets_modules_github_behaviors_ajax-error_ts-app_assets_modules_github_behaviors_include-87a4ae-eda74b9de9cd.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/app_assets_modules_github_behaviors_commenting_edit_ts-app_assets_modules_github_behaviors_ht-83c235-e429cff6ceb1.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/behaviors-c92ce7c6a557.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_delegated-events_dist_index_js-node_modules_github_catalyst_lib_index_js-f6223d90c7ba.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/notifications-global-01e85cd1be94.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_virtualized-list_es_index_js-node_modules_github_template-parts_lib_index_js-94dc7a2157c1.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_remote-form_dist_index_js-node_modules_delegated-events_dist_inde-70450e-4b93df70b903.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/app_assets_modules_github_ref-selector_ts-52913063a0b9.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/codespaces-b419a25ee02f.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_filter-input-element_dist_index_js-node_modules_github_remote-inp-3eebbd-0763620ad7bf.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_mini-throttle_dist_decorators_js-node_modules_delegated-events_di-e161aa-9d41fb1b6c9e.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_file-attachment-element_dist_index_js-node_modules_github_remote--3c9c82-b71ef90fbdc7.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/repositories-10217e4e5a53.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/vendors-node_modules_github_mini-throttle_dist_index_js-node_modules_github_catalyst_lib_inde-dbbea9-26cce2010167.js"></script>
+  <script crossorigin="anonymous" defer="defer" type="application/javascript" src="https://github.githubassets.com/assets/code-menu-d6d3c94ee97e.js"></script>
+
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/primer-react.8748b7127eb5f3cfb5ac.module.css"/>
+  <link crossorigin="anonymous" media="all" rel="stylesheet" href="https://github.githubassets.com/assets/notifications-subscriptions-menu.1bcff9205c241e99cff2.module.css"/>
+
+  <title>Anjiang-Wei/EquiBench</title>
+
+  <meta name="route-pattern" content="/:user_id/:repository" data-turbo-transient>
+  <meta name="route-controller" content="files" data-turbo-transient>
+  <meta name="route-action" content="disambiguate" data-turbo-transient>
+
+  <meta name="current-catalog-service-hash" content="f3abb0cc802f3d7b95fc8762b94bdcb13bf39634c40c357301c4aa1d67a256fb">
+
+  <meta name="request-id" content="E2DE:1FC57D:47A192C:4A6E818:67EDB904" data-turbo-transient="true"/>
+  <meta name="html-safe-nonce" content="cfdaebc5e611f55fbd1deaf98938b9457d1793fbfc40bf15200ef65be19ef28a" data-turbo-transient="true"/>
+  <meta name="visitor-payload" content="eyJyZWZlcnJlciI6bnVsbCwicmVxdWVzdF9pZCI6IkUyREU6MUZDNTdEOjQ3QTE5MkM6NEE2RTgxODo2N0VEQjkwNCIsInZpc2l0b3JfaWQiOiIzMjc3NTc0ODQzMzQxOTAyNTU0IiwicmVnaW9uX2VkZ2UiOiJzZWEiLCJyZWdpb25fcmVuZGVyIjoiaWFkIn0=" data-turbo-transient="true"/>
+  <meta name="visitor-hmac" content="ea3040e7c33b00e2ea96920c2a14c342f89f9cd5b74c7412ad7705a49957e137" data-turbo-transient="true"/>
+
+  <meta name="hovercard-subject-tag" content="repository:945652024" data-turbo-transient>
+
+  <meta name="github-keyboard-shortcuts" content="repository,copilot" data-turbo-transient="true"/>
+
+  <meta name="selected-link" value="repo_source" data-turbo-transient>
+  <link rel="assets" href="https://github.githubassets.com/">
+
+  <meta name="google-site-verification" content="Apib7-x98H0j5cPqHWwSMm6dNU4GmODRoqxLiDzdx9I">
+
+  <meta name="octolytics-url" content="https://collector.github.com/github/collect"/>
+  <meta name="octolytics-actor-id" content="1777562"/>
+  <meta name="octolytics-actor-login" content="frogcjn"/>
+  <meta name="octolytics-actor-hash" content="9701183a2805cc20e7cbaf982d05254b251ffcffb1fb02461be6aba22122bc45"/>
+
+  <meta name="analytics-location" content="/&lt;user-name&gt;/&lt;repo-name&gt;" data-turbo-transient="true"/>
+
+  <meta name="user-login" content="frogcjn">
+
+  <link rel="sudo-modal" href="/sessions/sudo_modal">
+
+  <meta name="viewport" content="width=device-width">
+
+  <meta name="description" content="Contribute to Anjiang-Wei/EquiBench development by creating an account on GitHub.">
+
+  <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub">
+
+  <link rel="fluid-icon" href="https://github.com/fluidicon.png" title="GitHub">
+  <meta property="fb:app_id" content="1401488693436528">
+  <meta name="apple-itunes-app" content="app-id=1477376905, app-argument=https://github.com/Anjiang-Wei/equibench"/>
+
+  <meta name="twitter:image" content="https://opengraph.githubassets.com/3acb53ed0cffae12347b520547b5566a7916fea66eb3b4a4630505ee002334db/Anjiang-Wei/EquiBench"/>
+  <meta name="twitter:site" content="@github"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Anjiang-Wei/EquiBench"/>
+  <meta name="twitter:description" content="Contribute to Anjiang-Wei/EquiBench development by creating an account on GitHub."/>
+  <meta property="og:image" content="https://opengraph.githubassets.com/3acb53ed0cffae12347b520547b5566a7916fea66eb3b4a4630505ee002334db/Anjiang-Wei/EquiBench"/>
+  <meta property="og:image:alt" content="Contribute to Anjiang-Wei/EquiBench development by creating an account on GitHub."/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="600"/>
+  <meta property="og:site_name" content="GitHub"/>
+  <meta property="og:type" content="object"/>
+  <meta property="og:title" content="Anjiang-Wei/EquiBench"/>
+  <meta property="og:url" content="https://github.com/Anjiang-Wei/EquiBench"/>
+  <meta property="og:description" content="Contribute to Anjiang-Wei/EquiBench development by creating an account on GitHub."/>
+
+  <link rel="shared-web-socket" href="wss://alive.github.com/_sockets/u/1777562/ws?session=eyJ2IjoiVjMiLCJ1IjoxNzc3NTYyLCJzIjoxNDg0NjI3MjgwLCJjIjoxNzcyMDAwNzUzLCJ0IjoxNzQzNjMyNjQ1fQ==--1f3df6dde1fa67a7196a3184afed7cf55fa0b57f3ff9064183f32889703b02e6" data-refresh-url="/_alive" data-session-id="8b6c048aa4f1870d0cbe4481bddccf852fd21aaf5b862f02a563ef937fccea5f">
+  <link rel="shared-web-socket-src" href="/assets-cdn/worker/socket-worker-eff89a71ae86.js">
+
+  <meta name="hostname" content="github.com">
+
+  <meta name="keyboard-shortcuts-preference" content="all">
+  <meta name="hovercards-preference" content="true">
+  <meta name="announcement-preference-hovercard" content="true">
+
+  <meta name="expected-hostname" content="github.com">
+
+  <meta http-equiv="x-pjax-version" content="c65893d39daaef16d92b9f4cc4b07246a69887b2b5063e30afe892b5f3035eaa" data-turbo-track="reload">
+  <meta http-equiv="x-pjax-csp-version" content="e26f9f0ba624ee85cc7ac057d8faa8618a4f25a85eab052c33d018ac0f6b1a46" data-turbo-track="reload">
+  <meta http-equiv="x-pjax-css-version" content="3880f621a6450d86227686dafe66b79bb840ae1d588507e3f013719db633d34a" data-turbo-track="reload">
+  <meta http-equiv="x-pjax-js-version" content="e72c3b0d1bf65084fdb02e5617345ac46f328a7a1c52f4ba57ac2541e522f6ab" data-turbo-track="reload">
+
+  <meta name="turbo-cache-control" content="no-preview" data-turbo-transient="">
+
+  <meta data-hydrostats="publish">
+  <meta name="go-import" content="github.com/Anjiang-Wei/EquiBench git https://github.com/Anjiang-Wei/EquiBench.git">
+
+  <meta name="octolytics-dimension-user_id" content="43546559"/>
+  <meta name="octolytics-dimension-user_login" content="Anjiang-Wei"/>
+  <meta name="octolytics-dimension-repository_id" content="945652024"/>
+  <meta name="octolytics-dimension-repository_nwo" content="Anjiang-Wei/EquiBench"/>
+  <meta name="octolytics-dimension-repository_public" content="true"/>
+  <meta name="octolytics-dimension-repository_is_fork" content="false"/>
+  <meta name="octolytics-dimension-repository_network_root_id" content="945652024"/>
+  <meta name="octolytics-dimension-repository_network_root_nwo" content="Anjiang-Wei/EquiBench"/>
+
+  <link rel="canonical" href="https://github.com/Anjiang-Wei/EquiBench" data-turbo-transient>
+
+  <meta name="turbo-body-classes" content="logged-in env-production page-responsive">
+
+  <meta name="browser-stats-url" content="https://api.github.com/_private/browser/stats">
+
+  <meta name="browser-errors-url" content="https://api.github.com/_private/browser/errors">
+
+  <meta name="release" content="174f29960ccae35d5e7eecb6ba2877df867a1c43">
+
+  <link rel="mask-icon" href="https://github.githubassets.com/assets/pinned-octocat-093da3e6fa40.svg" color="#000000">
+  <link rel="alternate icon" class="js-site-favicon" type="image/png" href="https://github.githubassets.com/favicons/favicon.png">
+  <link rel="icon" class="js-site-favicon" type="image/svg+xml" href="https://github.githubassets.com/favicons/favicon.svg" data-base-href="https://github.githubassets.com/favicons/favicon">
+
+  <meta name="theme-color" content="#1e2327">
+  <meta name="color-scheme" content="light dark"/>
+
+  <link rel="apple-touch-icon" href="https://github.githubassets.com/assets/apple-touch-icon-92bd46d04241.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="https://github.githubassets.com/assets/apple-touch-icon-180x180-a80b8e11abe2.png">
+  <meta name="apple-mobile-web-app-title" content="GitHub">
+
+  <link rel="manifest" href="/manifest.json" crossOrigin="use-credentials">
+  <style id="ms-consent-banner-main-styles">.w8hcgFksdo30C8w-bygqu{color:#000}.ydkKdaztSS0AeHWIeIHsQ a{color:#0067B8}.erL690_8JwUW-R4bJRcfl{background-color:#EBEBEB;color:#000}.erL690_8JwUW-R4bJRcfl:enabled:hover{color:#000;background-color:#DBDBDB;box-shadow:0px 4px 10px rgba(0,0,0,0.25);}.erL690_8JwUW-R4bJRcfl:enabled:focus{background-color:#DBDBDB;box-shadow:0px 4px 10px rgba(0,0,0,0.25);border:2px solid #000}.erL690_8JwUW-R4bJRcfl:disabled{opacity:1;color:rgba(0,0,0,0.2);background-color:rgba(0,0,0,0.2);}._1zNQOqxpBFSokeCLGi_hGr{background-color:#0067B8;color:#fff}._1zNQOqxpBFSokeCLGi_hGr:enabled:hover{color:#fff;background-color:#0067B8;box-shadow:0px 4px 10px rgba(0,0,0,0.25);}._1zNQOqxpBFSokeCLGi_hGr:enabled:focus{background-color:#0067B8;box-shadow:0px 4px 10px rgba(0,0,0,0.25);border:2px solid #000}._1zNQOqxpBFSokeCLGi_hGr:disabled{opacity:1;color:rgba(0,0,0,0.2);background-color:rgba(0,120,215,0.2);}._23tra1HsiiP6cT-Cka-ycB{position:relative;display:flex;z-index:9999;width:100%;background-color:#F2F2F2;justify-content:space-between;text-align:left}div[dir="rtl"]._23tra1HsiiP6cT-Cka-ycB{text-align:right}._1Upc2NjY8AlDn177YoVj0y{margin:0;padding-left:5%;padding-top:8px;padding-bottom:8px}div[dir="rtl"] ._1Upc2NjY8AlDn177YoVj0y{margin:0;padding:8px 5% 8px 0;float:none}._23tra1HsiiP6cT-Cka-ycB svg{fill:none;max-width:none;max-height:none}._1V_hlU-7jdtPiooHMu89BB{display:table-cell;padding:12px;width:24px;height:24px;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:normal;font-size:24px;line-height:0}.f6QKJD7fhSbnJLarTL-W-{display:table-cell;vertical-align:middle;padding:0;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:normal;font-size:13px;line-height:16px}.f6QKJD7fhSbnJLarTL-W- a{text-decoration:underline}._2j0fmugLb1FgYz6KPuB91w{display:inline-block;margin-left:5%;margin-right:5%;min-width:40%;min-width:calc((150px + 3 * 4px) * 2 + 150px);min-width:-webkit-fit-content;min-width:-moz-fit-content;min-width:fit-content;align-self:center;position:relative}._1XuCi2WhiqeWRUVp3pnFG3{margin:4px;padding:5px;min-width:150px;min-height:36px;vertical-align:top;cursor:pointer;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px;text-align:center}._1XuCi2WhiqeWRUVp3pnFG3:focus{box-sizing:border-box}._1XuCi2WhiqeWRUVp3pnFG3:disabled{cursor:not-allowed}._2bvsb3ubApyZ0UGoQA9O9T{display:block;position:fixed;z-index:10000;top:0;left:0;width:100%;height:100%;background-color:rgba(255,255,255,0.6);overflow:auto;text-align:left}div[dir="rtl"]._2bvsb3ubApyZ0UGoQA9O9T{text-align:right}div[dir="rtl"] ._2bvsb3ubApyZ0UGoQA9O9T{left:auto;right:0}.AFsJE948muYyzCMktdzuk{position:relative;top:8%;margin-bottom:40px;margin-left:auto;margin-right:auto;box-sizing:border-box;width:640px;background-color:#fff;border:1px solid #0067B8}._3kWyBRbW_dgnMiEyx06Fu4{float:right;z-index:1;margin:2px;padding:12px;cursor:pointer;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:normal;font-size:13px;line-height:13px;display:flex;align-items:center;text-align:center;color:#666;background-color:#fff}div[dir="rtl"] ._3kWyBRbW_dgnMiEyx06Fu4{margin:2px;padding:12px;float:left}.uCYvKvHXrhjNgflv1VqdD{position:static;margin-top:36px;margin-left:36px;margin-right:36px}._17pX1m9O_W--iZbDt3Ta5r{margin-top:0;margin-bottom:12px;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:600;font-size:20px;line-height:24px;text-transform:none}._1kBkHQ1V1wu3kl-YcLgUr6{height:446px;overflow:auto}._20_nXDf6uFs9Q6wxRXG-I-{margin-top:0;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px}._20_nXDf6uFs9Q6wxRXG-I- a{text-decoration:underline}dl._2a0NH_GDQEQe5Ynfo7suVH{margin-top:36px;margin-bottom:0;padding:0;list-style:none;text-transform:none}dt._3j_LCPv7fyXv3A8FIXVwZ4{margin-top:20px;float:none;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:600;font-size:18px;line-height:24px;list-style:none}.k-vxTGFbdq1aOZB2HHpjh{margin:0;padding:0;}._2Bucyy75c_ogoU1g-liB5R{margin:0;padding:0;border-bottom:none;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:600;font-size:18px;line-height:24px;text-transform:none}._63gwfzV8dclrsl2cfd90r{display:inline-block;margin-top:0;margin-bottom:13px;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px}._1l8wM_4mRYGz3Iu7l3BZR7{display:block}._2UE03QS02aZGkslegN_F-i{display:inline-block;position:relative;left:5px;margin-bottom:13px;margin-right:34px;padding:3px}div[dir="rtl"] ._2UE03QS02aZGkslegN_F-i{margin:0 0 13px 34px;padding:3px;float:none}div[dir="rtl"] ._2UE03QS02aZGkslegN_F-i{left:auto;right:5px}._23tra1HsiiP6cT-Cka-ycB *::before,._2bvsb3ubApyZ0UGoQA9O9T *::before,._23tra1HsiiP6cT-Cka-ycB *::after,._2bvsb3ubApyZ0UGoQA9O9T *::after{box-sizing:inherit}._1HSFn0HzGo6w4ADApV8-c4{outline:2px solid rgba(0,0,0,0.8)}input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2{display:inline-block;position:relative;margin-top:0;margin-left:0;margin-right:0;height:0;width:0;border-radius:0;cursor:pointer;outline:none;box-sizing:border-box;-webkit-appearance:none;-moz-appearance:none;appearance:none}input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2+label::before{display:block;position:absolute;top:5px;left:3px;height:19px;width:19px;content:"";border-radius:50%;border:1px solid #000;background-color:#fff}div[dir="rtl"] input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2+label::before{left:auto;right:3px}input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:hover::before{border:1px solid #0067B8}input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:hover::after{display:block;position:absolute;top:10px;left:8px;height:9px;width:9px;content:"";border-radius:50%;background-color:rgba(0,0,0,0.8)}div[dir="rtl"] input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:hover::after{left:auto;right:8px}input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:focus::before{border:1px solid #0067B8}input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:focus::after{display:block;position:absolute;top:10px;left:8px;height:9px;width:9px;content:"";border-radius:50%;background-color:#000}div[dir="rtl"] input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:not(:disabled)+label:focus::after{left:auto;right:8px}input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:checked+label::after{display:block;position:absolute;top:10px;left:8px;height:9px;width:9px;content:"";border-radius:50%;background-color:#000}div[dir="rtl"] input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:checked+label::after{left:auto;right:8px}input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:disabled+label{cursor:not-allowed}input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:disabled+label::before{border:1px solid rgba(0,0,0,0.2);background-color:rgba(0,0,0,0.2);}._3RJzeL3l9Rl_lAQEm6VwdX{display:block;position:static;float:right;margin-top:0;margin-bottom:0;margin-left:19px;margin-right:0;padding-top:0;padding-bottom:0;padding-left:8px;padding-right:0;width:80%;width:calc(100% - 19px);font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px;text-transform:none;cursor:pointer;box-sizing:border-box}div[dir="rtl"] ._3RJzeL3l9Rl_lAQEm6VwdX{margin:0 19px 0 0;padding:0 8px 0 0;float:left}.nohp3sIG12ZBhzcMnPala{margin-top:20px;margin-bottom:48px}._2uhaEsmeotZ3P-M0AXo2kF{padding:0;width:278px;height:36px;cursor:pointer;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px;text-align:center}._2uhaEsmeotZ3P-M0AXo2kF:focus{box-sizing:border-box}._2uhaEsmeotZ3P-M0AXo2kF:disabled{cursor:not-allowed}._3tOu1FJ59c_xz_PmI1lKV5{float:right;padding:0;width:278px;height:36px;cursor:pointer;font-family:Segoe UI, SegoeUI, Arial, sans-serif;font-style:normal;font-weight:normal;font-size:15px;line-height:20px;text-align:center}._3tOu1FJ59c_xz_PmI1lKV5:focus{box-sizing:border-box}._3tOu1FJ59c_xz_PmI1lKV5:disabled{cursor:not-allowed}div[dir="rtl"] ._3tOu1FJ59c_xz_PmI1lKV5{margin:0;padding:0;float:left}@media only screen and (max-width: 768px){._2j0fmugLb1FgYz6KPuB91w,._1Upc2NjY8AlDn177YoVj0y{padding-top:8px;padding-bottom:12px;padding-left:3.75%;padding-right:3.75%;margin:0;width:92.5%}._23tra1HsiiP6cT-Cka-ycB{display:block}._1XuCi2WhiqeWRUVp3pnFG3{margin-bottom:8px;margin-left:0;margin-right:0;width:100%}._2bvsb3ubApyZ0UGoQA9O9T{overflow:hidden}.AFsJE948muYyzCMktdzuk{top:1.8%;width:93.33%;height:96.4%;overflow:hidden}.uCYvKvHXrhjNgflv1VqdD{margin-top:24px;margin-left:24px;margin-right:24px;height:100%}._1kBkHQ1V1wu3kl-YcLgUr6{height:62%;height:calc(100% - 188px);min-height:50%}._2uhaEsmeotZ3P-M0AXo2kF{width:100%}._3tOu1FJ59c_xz_PmI1lKV5{margin-bottom:12px;margin-left:0;width:100%}div[dir="rtl"] ._3tOu1FJ59c_xz_PmI1lKV5{margin:0 0 12px 0;padding:0;float:none}}@media only screen and (max-width: 768px) and (orientation: landscape), only screen and (max-height: 260px), only screen and (max-width: 340px){.AFsJE948muYyzCMktdzuk{overflow:auto}}@media only screen and (max-height: 260px), only screen and (max-width: 340px){._1XuCi2WhiqeWRUVp3pnFG3{min-width:0}._3kWyBRbW_dgnMiEyx06Fu4{padding:3%}.uCYvKvHXrhjNgflv1VqdD{margin-top:3%;margin-left:3%;margin-right:3%}._17pX1m9O_W--iZbDt3Ta5r{margin-bottom:3%}._1kBkHQ1V1wu3kl-YcLgUr6{height:calc(79% - 64px)}.nohp3sIG12ZBhzcMnPala{margin-top:5%;margin-bottom:10%}._3tOu1FJ59c_xz_PmI1lKV5{margin-bottom:3%}div[dir="rtl"] ._3tOu1FJ59c_xz_PmI1lKV5{margin:0 0 3% 0;padding:0;float:none}}
+</style>
+<style type="text/css" id="ms-consent-banner-theme-styles">._23tra1HsiiP6cT-Cka-ycB {
+            background-color: #24292f !important;
+        }.w8hcgFksdo30C8w-bygqu {
+            color: #ffffff !important;
+        }.ydkKdaztSS0AeHWIeIHsQ a {
+            color: #d8b9ff !important;
+        }._2bvsb3ubApyZ0UGoQA9O9T {
+            background-color: rgba(23, 23, 23, 0.8) !important;
+        }.AFsJE948muYyzCMktdzuk {
+            background-color: #24292f !important;
+            border: 1px solid #d8b9ff !important;
+        }._3kWyBRbW_dgnMiEyx06Fu4 {
+            color: #d8b9ff !important;
+            background-color: #24292f !important;
+        }._1zNQOqxpBFSokeCLGi_hGr {
+            border: 1px solid #ffffff !important;
+            background-color: #ffffff !important;
+            color: #1f2328 !important;
+        }._1zNQOqxpBFSokeCLGi_hGr:enabled:hover {
+            color: #1f2328 !important;
+            background-color: #d8b9ff !important;
+            box-shadow: none !important;
+            border: 1px solid transparent !important;
+        }._1zNQOqxpBFSokeCLGi_hGr:enabled:focus {
+            background-color: #d8b9ff !important;
+            box-shadow: none !important;
+            border: 2px solid #ffffff !important;
+        }._1zNQOqxpBFSokeCLGi_hGr:disabled {
+            opacity: 0.5 !important;
+            color: #1f2328 !important;
+            background-color: #ffffff !important;
+            border: 1px solid transparent !important;
+        }.erL690_8JwUW-R4bJRcfl {
+            border: 1px solid #eaeef2 !important;
+            background-color: #32383f !important;
+            color: #ffffff !important;
+        }.erL690_8JwUW-R4bJRcfl:enabled:hover {
+            color: #ffffff !important;
+            background-color: #24292f !important;
+            box-shadow: none !important;
+            border: 1px solid #ffffff !important;
+        }.erL690_8JwUW-R4bJRcfl:enabled:focus {
+            background-color: #24292f !important;
+            box-shadow: none !important;
+            border: 2px solid #6e7781 !important;
+        }.erL690_8JwUW-R4bJRcfl:disabled {
+            opacity: 0.5 !important;
+            color: #ffffff !important;
+            background-color: #424a53 !important;
+            border: 1px solid #6e7781 !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2 + label::before {
+            border: 1px solid #d8b9ff !important;
+            background-color: #24292f !important;
+        }._1HSFn0HzGo6w4ADApV8-c4 {
+            outline: 2px solid #ffffff !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:checked + label::after {
+            background-color: #d8b9ff !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2 + label:hover::before {
+            border: 1px solid #ffffff !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2 + label:hover::after {
+            background-color: #ffffff !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2 + label:focus::before {
+            border: 1px solid #ffffff !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2 + label:focus::after {
+            background-color: #d8b9ff !important;
+        }input[type="radio"]._1dp8Vp5m3HwAqGx8qBmFV2:disabled + label::before {
+            border: 1px solid rgba(227, 227, 227, 0.2) !important;
+            background-color: rgba(227, 227, 227, 0.2) !important;
+        }</style>
+<style data-styled="active" data-styled-version="5.3.11"></style>
+</head>
+<body>
+
+<section class="hero space-background has-text-white">
+  <div class="hero-body space-background-overlay">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title has-text-black">EquiBench: Benchmarking Code Reasoning Capabilities of Large Language Models via Equivalence Checking</h1>
+          <h1 class="title is-4 publication-title has-text-black">arXiv:2502.12466</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              Anjiang Wei\(^{1}\),
+            </span>
+            <span class="author-block">
+              Jiannan Cao\(^{2}\),
+            </span>
+            <span class="author-block">
+              Ran Li\(^{1, 3}\),
+            </span>
+            <span class="author-block">
+              Hongyu Chen\(^{4}\),
+            </span>
+            <span class="author-block">
+              Yuhui Zhang\(^{1}\),
+            </span>
+            <span class="author-block">
+              Ziheng Wang\(^{1}\),
+            </span>
+            <span class="author-block">
+              Yaofeng Sun\(^{5}\),
+            </span>
+            <span class="author-block">
+              Yuan Liu\(^{3}\),
+            </span>
+            <span class="author-block">
+              Thiago S. F. X. Teixeira\(^{6}\),
+            </span>
+            <span class="author-block">
+              Diyi Yang\(^{1}\),
+            </span>
+            <span class="author-block">
+              Ke Wang\(^{7}\),
+            </span>
+            <span class="author-block">
+              Alex Aiken\(^{1}\)
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block">\(^1\)Stanford University</span>
+            <span class="author-block">\(^2\)MIT</span>
+            <span class="author-block">\(^3\)Google</span>
+            <span class="author-block">\(^4\)Nanjing University</span>
+            <span class="author-block">\(^5\)DeepSeek</span>
+            <span class="author-block">\(^6\)Intel</span>
+            <span class="author-block">\(^7\)Visa Research</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2502.12466" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/Anjiang-Wei/equibench" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <span class="link-block">
+                <a href="https://huggingface.co/datasets/anjiangwei/EquiBench-Datasets" target="_blank" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    🤗
+                  </span>
+                  <span>Dataset</span>
+                  </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- B -->
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <div class="column has-text-centered">
+          <h2 class="title is-4">Abstract</h2>
+          <div class="content has-text-justified">
+            <p>
+              Equivalence checking, i.e., determining whether two programs produce identical outputs for all possible inputs, underpins a broad range of applications, including software refactoring, testing, and optimization. We present the task of equivalence checking as a new way to evaluate the code reasoning abilities of large language models (LLMs). We introduce EquiBench, a dataset of 2400 program pairs spanning four programming languages and six equivalence categories. These pairs are systematically generated through program analysis, compiler scheduling, and superoptimization, covering nontrivial structural transformations that demand deep semantic reasoning beyond simple syntactic variations. Our evaluation of 17 state-of-the-art LLMs shows that OpenAI o3-mini achieves the highest overall accuracy of 78.0%. In the most challenging categories, the best accuracies are 62.3% and 68.8%, only modestly above the 50% random baseline for binary classification, indicating significant room for improvement in current models’ code reasoning capabilities.
+            </p>  
+          <br>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/ B -->
+
+    <article class="markdown-body entry-content container-lg" itemprop="text"><div class="markdown-heading" dir="auto">
+
+      <div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">Leaderboard</h2><a id="user-content-evaluation-results" class="anchor" aria-label="Permalink: Leaderboard" href="#evaluation-results"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+      <table>
+      <thead>
+      <tr>
+      <th>Model</th>
+      <th>DCE</th>
+      <th>CUDA</th>
+      <th>x86-64</th>
+      <th>OJ_A</th>
+      <th>OJ_V</th>
+      <th>OJ_VA</th>
+      <th>Overall Accuracy</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>o3-mini-2025-01-31</td>
+          <td><strong>68.8</strong></td>
+          <td>59.0</td>
+          <td><strong>84.5</strong></td>
+          <td><strong>84.2</strong></td>
+          <td>88.2</td>
+          <td><strong>83.2</strong></td>
+          <td><strong>78.0</strong></td>
+        </tr>
+
+      
+        <tr>
+          <td>DeepSeek-R1</td>
+          <td>52.2</td>
+          <td>61.0</td>
+          <td>78.2</td>
+          <td>79.8</td>
+          <td><strong>91.5</strong></td>
+          <td>78.0</td>
+          <td>73.5</td>
+        </tr>
+
+        <tr>
+          <td>o1-mini-2024-09-12</td>
+          <td>55.8</td>
+          <td>50.7</td>
+          <td>74.2</td>
+          <td>80.0</td>
+          <td>89.8</td>
+          <td>78.8</td>
+          <td>71.5</td>
+        </tr>
+
+        <tr>
+          <td>claude3.5-sonnet-2024-10-22</td>
+          <td>38.5</td>
+          <td><strong>62.3</strong></td>
+          <td>70.0</td>
+          <td>71.2</td>
+          <td>78.0</td>
+          <td>73.5</td>
+          <td>65.6</td>
+        </tr>
+
+        <tr>
+          <td>gpt-4o-2024-11-20</td>
+          <td>43.2</td>
+          <td>49.5</td>
+          <td>65.2</td>
+          <td>71.0</td>
+          <td>87.0</td>
+          <td>73.8</td>
+          <td>65.0</td>
+        </tr>
+
+
+        <tr>
+          <td>DeepSeek-V3</td>
+          <td>41.0</td>
+          <td>50.7</td>
+          <td>69.2</td>
+          <td>73.0</td>
+          <td>83.5</td>
+          <td>72.5</td>
+          <td>65.0</td>
+        </tr>
+
+        <tr>
+          <td>Llama-3.1-405B-Instruct-Turbo</td>
+          <td>40.0</td>
+          <td>49.0</td>
+          <td>75.0</td>
+          <td>72.2</td>
+          <td>74.5</td>
+          <td>72.8</td>
+          <td>63.9</td>
+        </tr>
+
+
+        <tr>
+          <td>Qwen2.5-72B-Instruct-Turbo</td>
+          <td>42.8</td>
+          <td>56.0</td>
+          <td>64.8</td>
+          <td>72.0</td>
+          <td>76.5</td>
+          <td>70.8</td>
+          <td>63.8</td>
+          </tr>
+
+          <tr>
+            <td>gpt-4o-mini-2024-07-18</td>
+            <td>46.8</td>
+            <td>50.2</td>
+            <td>56.8</td>
+            <td>64.5</td>
+            <td>91.2</td>
+            <td>64.0</td>
+            <td>62.2</td>
+            </tr>
+            
+      <tr>
+      <td>Qwen2.5-7B-Instruct-Turbo</td>
+      <td>50.5</td>
+      <td>49.2</td>
+      <td>58.0</td>
+      <td>62.0</td>
+      <td>80.8</td>
+      <td>63.0</td>
+      <td>60.6</td>
+      </tr>
+
+
+      <tr>
+        <td>QwQ-32B-Preview</td>
+        <td>48.2</td>
+        <td>50.5</td>
+        <td>62.7</td>
+        <td>65.2</td>
+        <td>71.2</td>
+        <td>64.2</td>
+        <td>60.3</td>
+        </tr>
+
+      <tr>
+        <td>Llama-3.1-70B-Instruct-Turbo</td>
+        <td>47.5</td>
+        <td>50.0</td>
+        <td>58.5</td>
+        <td>66.2</td>
+        <td>72.0</td>
+        <td>67.5</td>
+        <td>60.3</td>
+      </tr>
+
+      <tr>
+        <td>Mixtral-8x22B-Instruct-v0.1</td>
+        <td>46.8</td>
+        <td>49.0</td>
+        <td>62.7</td>
+        <td>63.5</td>
+        <td>76.0</td>
+        <td>62.7</td>
+        <td>60.1</td>
+      </tr>
+
+      <tr>
+        <td>Mixtral-8x7B-Instruct-v0.1</td>
+        <td>50.2</td>
+        <td>47.0</td>
+        <td>64.2</td>
+        <td>59.0</td>
+        <td>61.5</td>
+        <td>55.0</td>
+        <td>56.1</td>
+      </tr>
+
+
+      <tr>
+        <td>Mistral-7B-Instruct-v0.3</td>
+        <td>51.0</td>
+        <td>57.2</td>
+        <td>73.8</td>
+        <td>50.7</td>
+        <td>50.5</td>
+        <td>50.2</td>
+        <td>55.6</td>
+      </tr>
+
+      <tr>
+        <td>Llama-3.1-8B-Instruct-Turbo</td>
+        <td>41.8</td>
+        <td>49.8</td>
+        <td>50.5</td>
+        <td>57.5</td>
+        <td>75.5</td>
+        <td>56.8</td>
+        <td>55.3</td>
+      </tr>
+
+      <tr>
+        <td>Llama-3.2-3B-Instruct-Turbo</td>
+        <td>50.0</td>
+        <td>49.8</td>
+        <td>50.0</td>
+        <td>51.5</td>
+        <td>51.5</td>
+        <td>51.5</td>
+        <td>50.7</td>
+      </tr>
+
+      <tr>
+        <td><em>Random Baseline</em></td>
+        <td>50.0</td>
+        <td>50.0</td>
+        <td>50.0</td>
+        <td>50.0</td>
+        <td>50.0</td>
+        <td>50.0</td>
+        <td>50.0</td>
+      </tr>
+
+      <tr>
+      <td><strong>Mean</strong></td>
+      <td>47.9</td>
+      <td>52.4</td>
+      <td>65.8</td>
+      <td>67.3</td>
+      <td>76.4</td>
+      <td>67.0</td>
+      <td>62.8</td>
+      </tr>
+      </tbody>
+      </table>
+      
+      <div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">Overview</h2><a id="user-content-overview" class="anchor" aria-label="Permalink: Overview" href="#overview"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+      <p dir="auto">EquiBench is a comprehensive benchmark designed to evaluate the code reasoning capabilities of Large Language Models (LLMs) through equivalence checking tasks. This framework helps researchers and developers assess how well different LLMs understand code semantics, reason about program functionality, and determine when two code snippets are functionally equivalent despite syntactic differences.</p>
+      <div class="markdown-heading" dir="auto">
+        
+      <h3 tabindex="-1" class="heading-element" dir="auto">Key Features</h3>
+      <a id="user-content-key-features" class="anchor" aria-label="Permalink: Key Features" href="#key-features"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+        <ul dir="auto">
+      <li><strong>Diverse Test Cases</strong>: Includes 2400 pairs of equivalent programs across six distinct categories (<code>DCE</code> for C programs, <code>x86-64</code> for x86-64 programs, <code>CUDA</code> for CUDA programs, and <code>OJ_A</code>, <code>OJ_V</code>, <code>OJ_VA</code> for Python competitive programming problems)</li>
+      <li><strong>Multiple Prompting Strategies</strong>: Support for zero-shot, few-shot, and chain-of-thought variations to evaluate different reasoning approaches</li>
+      <li><strong>Wide Model Support</strong>: Compatible with leading LLMs from OpenAI, Anthropic, Meta, Mistral AI, Qwen, and DeepSeek</li>
+      <li><strong>Standardized Methodology</strong>: Consistent evaluation framework enabling fair comparison across different model architectures</li>
+      </ul>
+      <h3 tabindex="-1" class="heading-element" dir="auto">Example Program Pairs and Results</h3>
+      <!-- <figure class="ltx_figure" id="S1.F1"><img alt="Refer to caption" class="ltx_graphics ltx_centering ltx_img_landscape" height="339" id="S1.F1.g1" src="assets/x1.png" width="830">
+        <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1: </span><span class="ltx_text ltx_font_bold" id="S1.F1.3.1">An equivalent and an inequivalent program pair constructed using prior techniques.</span> Prior works generate such pairs through <em class="ltx_emph ltx_font_italic" id="S1.F1.4.2">basic statement-level syntactic modifications</em> with minimal semantic reasoning, whereas our approach, presented later, relies on structural program transformations that require much deeper semantic reasoning.</figcaption>
+      </figure> -->
+
+      <figure class="ltx_figure" id="S3.F2"><img alt="Refer to caption" class="ltx_graphics ltx_centering ltx_img_landscape" height="508" id="S3.F2.g1" src="assets/x2.png" width="830">
+        <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 1: </span><span class="ltx_text ltx_font_bold" id="S3.F2.3.1">An inequivalent pair from the DCE category in EquiBench.</span> In the left program, <span class="ltx_text ltx_font_typewriter" id="S3.F2.4.2">c = 1</span> is dead code and has no effect on the program state, whereas in the right program, it is executed and alters the program state. Such cases are generated using the Dead Code Elimination (DCE) pass in compilers.</figcaption>
+      </figure>
+
+      <br>
+      <br>
+
+      <figure class="ltx_figure" id="S3.F3"><img alt="Refer to caption" class="ltx_graphics ltx_centering ltx_img_landscape" height="1200" id="S3.F3.g1" src="assets/x3.png" width="1000" style="max-width: none; width: 1000px; height: auto;">
+        <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 2: </span><span class="ltx_text ltx_font_bold" id="S3.F3.6.1">An equivalent pair from the CUDA category in EquiBench.</span> Both programs perform matrix-vector multiplication (<math alttext="y=Ax" class="ltx_Math" display="inline" id="S3.F3.2.m1.1"><semantics id="S3.F3.2.m1.1b"><mrow id="S3.F3.2.m1.1.1" xref="S3.F3.2.m1.1.1.cmml"><mi id="S3.F3.2.m1.1.1.2" xref="S3.F3.2.m1.1.1.2.cmml">y</mi><mo id="S3.F3.2.m1.1.1.1" xref="S3.F3.2.m1.1.1.1.cmml">=</mo><mrow id="S3.F3.2.m1.1.1.3" xref="S3.F3.2.m1.1.1.3.cmml"><mi id="S3.F3.2.m1.1.1.3.2" xref="S3.F3.2.m1.1.1.3.2.cmml">A</mi><mo id="S3.F3.2.m1.1.1.3.1" xref="S3.F3.2.m1.1.1.3.1.cmml">⁢</mo><mi id="S3.F3.2.m1.1.1.3.3" xref="S3.F3.2.m1.1.1.3.3.cmml">x</mi></mrow></mrow><annotation-xml encoding="MathML-Content" id="S3.F3.2.m1.1c"><apply id="S3.F3.2.m1.1.1.cmml" xref="S3.F3.2.m1.1.1"><eq id="S3.F3.2.m1.1.1.1.cmml" xref="S3.F3.2.m1.1.1.1"></eq><ci id="S3.F3.2.m1.1.1.2.cmml" xref="S3.F3.2.m1.1.1.2">𝑦</ci><apply id="S3.F3.2.m1.1.1.3.cmml" xref="S3.F3.2.m1.1.1.3"><times id="S3.F3.2.m1.1.1.3.1.cmml" xref="S3.F3.2.m1.1.1.3.1"></times><ci id="S3.F3.2.m1.1.1.3.2.cmml" xref="S3.F3.2.m1.1.1.3.2">𝐴</ci><ci id="S3.F3.2.m1.1.1.3.3.cmml" xref="S3.F3.2.m1.1.1.3.3">𝑥</ci></apply></apply></annotation-xml><annotation encoding="application/x-tex" id="S3.F3.2.m1.1d">y=Ax</annotation><annotation encoding="application/x-llamapun" id="S3.F3.2.m1.1e">italic_y = italic_A italic_x</annotation></semantics></math>). The right-hand program uses <em class="ltx_emph ltx_font_italic" id="S3.F3.7.2">shared memory tiling</em> to improve performance. Tensor compilers are utilized to explore different <em class="ltx_emph ltx_font_italic" id="S3.F3.8.3">scheduling strategies</em>, automating the generation.</figcaption>
+      </figure>
+
+      <br>
+      <br>
+
+      <figure class="ltx_figure" id="S3.F4"><img alt="Refer to caption" class="ltx_graphics ltx_centering ltx_img_square" height="700" id="S3.F4.g1" src="assets/x4.png" width="830" style="max-width: 50%; height: auto;">
+        <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 3: </span><span class="ltx_text ltx_font_bold" id="S3.F4.5.1">An equivalent pair from the x86-64 category in EquiBench.</span> Both programs are compiled from the same C function shown above—the left using a compiler and the right using a <em class="ltx_emph ltx_font_italic" id="S3.F4.6.2">superoptimizer</em>. The function counts the number of set bits in the input <span class="ltx_text ltx_font_typewriter" id="S3.F4.7.3">%rdi</span> register and stores the result in <span class="ltx_text ltx_font_typewriter" id="S3.F4.8.4">%rax</span>. Their equivalence has been formally verified by the superoptimizer.</figcaption>
+      </figure>
+
+      <br>
+      <br>
+
+      <figure class="ltx_figure" id="S3.F5"><img alt="Refer to caption" class="ltx_graphics ltx_centering ltx_img_square" height="935" id="S3.F5.g1" src="assets/x5.png" width="830">
+        <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 4: </span><span class="ltx_text ltx_font_bold" id="S3.F5.5.1">Equivalent pairs from the OJ_A, OJ_V, OJ_VA categories in EquiBench.</span> OJ_A pairs demonstrate <em class="ltx_emph ltx_font_italic" id="S3.F5.6.2">algorithmic equivalence</em>, OJ_V pairs involve <em class="ltx_emph ltx_font_italic" id="S3.F5.7.3">variable renaming</em> transformations, and OJ_VA pairs combine <em class="ltx_emph ltx_font_italic" id="S3.F5.8.4">both</em> types of variations.</figcaption>
+      </figure>
+
+      <br>
+      <br>
+
+      <figure class="ltx_figure" id="S4.F6"><img alt="Refer to caption" class="ltx_graphics ltx_centering ltx_img_landscape" height="616" id="S4.F6.g1" src="assets/x6.png" width="830">
+        <figcaption class="ltx_caption ltx_centering"><span class="ltx_tag ltx_tag_figure">Figure 5: </span><span class="ltx_text ltx_font_bold" id="S4.F6.2.1">Scaling Trend on EquiBench.</span></figcaption>
+      </figure>
+      
+      <br>
+      <br>
+
+
+      
+
+      <div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">Supported Categories</h2><a id="user-content-supported-categories" class="anchor" aria-label="Permalink: Supported Categories" href="#supported-categories"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+      <p dir="auto">EquiBench contains 2400 pairs of programs across six distinct categories of code equivalence tasks:</p>
+      <ul dir="auto">
+      <li><strong>DCE (Dead Code Elimination for C programs)</strong>: Code pairs that differ by removal of dead / live code</li>
+      <li><strong>x86-64 (Superoptimizer for x86-64 program)</strong>: Assembly code pairs optimized using the x86-64 framework</li>
+      <li><strong>CUDA (Compiler Scheduling for CUDA programs)</strong>: Code pairs optimized for tensor operations</li>
+      <li><strong>OJ_A (Python Competitive Programming - Algorithm)</strong>: Different algorithmic solutions to the same programming problem</li>
+      <li><strong>OJ_V (Python Competitive Programming - Variable Renaming)</strong>: Code pairs with variable renaming transformations</li>
+      <li><strong>OJ_VA (Python Competitive Programming - Variables + Algorithms)</strong>: Code pairs with both variable renaming and algorithmic differences</li>
+      </ul>
+      <p dir="auto">Each category contains 400 pairs of programs (200 equivalent and 200 inequivalent), providing a diverse range of challenges for LLMs to reason about code semantics.</p>
+      <div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">Supported Prompt Types</h2><a id="user-content-supported-prompt-types" class="anchor" aria-label="Permalink: Supported Prompt Types" href="#supported-prompt-types"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+      <p dir="auto">EquiBench evaluates models using four different prompting strategies:</p>
+      <ul dir="auto">
+      <li><code>ZERO</code>: Zero-shot prompting (directly asking the model without examples)</li>
+      <li><code>FEW</code>: Few-shot prompting (providing example problems and solutions)</li>
+      <li><code>ZERO_COT</code>: Zero-shot chain of thought (encouraging step-by-step reasoning)</li>
+      <li><code>FEW_COT</code>: Few-shot chain of thought (examples with step-by-step reasoning)</li>
+      </ul>
+      <p dir="auto">Each strategy tests different aspects of a model's reasoning capabilities, from basic understanding to advanced reasoning chains.</p>
+      <div class="markdown-heading" dir="auto"><h2 tabindex="-1" class="heading-element" dir="auto">HuggingFace Dataset</h2><a id="user-content-huggingface-dataset" class="anchor" aria-label="Permalink: HuggingFace Dataset" href="#huggingface-dataset"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+      <p dir="auto">The EquiBench dataset is hosted on HuggingFace as <a href="https://huggingface.co/datasets/anjiangwei/EquiBench-Datasets" rel="nofollow">anjiangwei/EquiBench-Datasets</a>.</p>
+      <div class="markdown-heading" dir="auto"><h3 tabindex="-1" class="heading-element" dir="auto">Dataset Statistics</h3><a id="user-content-dataset-statistics" class="anchor" aria-label="Permalink: Dataset Statistics" href="#dataset-statistics"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="m7.775 3.275 1.25-1.25a3.5 3.5 0 1 1 4.95 4.95l-2.5 2.5a3.5 3.5 0 0 1-4.95 0 .751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018 1.998 1.998 0 0 0 2.83 0l2.5-2.5a2.002 2.002 0 0 0-2.83-2.83l-1.25 1.25a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042Zm-4.69 9.64a1.998 1.998 0 0 0 2.83 0l1.25-1.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042l-1.25 1.25a3.5 3.5 0 1 1-4.95-4.95l2.5-2.5a3.5 3.5 0 0 1 4.95 0 .751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018 1.998 1.998 0 0 0-2.83 0l-2.5 2.5a1.998 1.998 0 0 0 0 2.83Z"></path></svg></a></div>
+      <table>
+      <thead>
+      <tr>
+      <th>Category</th>
+      <th>Language</th>
+      <th>Equivalent Pairs</th>
+      <th>Inequivalent Pairs</th>
+      <th>Total</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      <td>DCE</td>
+      <td>C</td>
+      <td>200</td>
+      <td>200</td>
+      <td>400</td>
+      </tr>
+      <tr>
+      <td>x86-64</td>
+      <td>x86-64</td>
+      <td>200</td>
+      <td>200</td>
+      <td>400</td>
+      </tr>
+      <tr>
+      <td>CUDA</td>
+      <td>CUDA</td>
+      <td>200</td>
+      <td>200</td>
+      <td>400</td>
+      </tr>
+      <tr>
+      <td>OJ_A</td>
+      <td>Python</td>
+      <td>200</td>
+      <td>200</td>
+      <td>400</td>
+      </tr>
+      <tr>
+      <td>OJ_V</td>
+      <td>Python</td>
+      <td>200</td>
+      <td>200</td>
+      <td>400</td>
+      </tr>
+      <tr>
+      <td>OJ_VA</td>
+      <td>Python</td>
+      <td>200</td>
+      <td>200</td>
+      <td>400</td>
+      </tr>
+      <tr>
+      <td><strong>Total</strong></td>
+      <td></td>
+      <td><strong>1200</strong></td>
+      <td><strong>1200</strong></td>
+      <td><strong>2400</strong></td>
+      </tr>
+      </tbody>
+      </table>
+    </article>
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+
+        <h3 class="title is-4">Explore EquiBench!</h3>
+        <div class="content has-text-justified">
+          <iframe
+            src="https://huggingface.co/datasets/anjiangwei/EquiBench-Datasets/embed/viewer/default/dev"
+            frameborder="0"
+            width="100%"
+            height="560px"
+          ></iframe>
+        </div><br>
+      </div>
+    </div>
+  </div>
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{wei2025equibench,
+      title={EquiBench: Benchmarking Code Reasoning Capabilities of Large Language Models via Equivalence Checking},
+      author={Wei, Anjiang and Cao, Jiannan and Li, Ran and Chen, Hongyu and Zhang, Yuhui and Wang, Ziheng and Sun, Yaofeng and Liu, Yuan and Teixeira, Thiago S. F. X. and Yang, Diyi and Wang, Ke and Aiken, Alex},
+      journal={arXiv preprint arXiv:2502.12466},
+      year={2025}
+    }
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a 
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+              Creative Commons Attribution-ShareAlike 4.0 International License
+            </a>. 
+            The website template is from the 
+            <a href="https://github.com/nerfies/nerfies.github.io">
+              Nerfies
+            </a> 
+            project page.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
